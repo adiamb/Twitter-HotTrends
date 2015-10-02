@@ -20,52 +20,18 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="index.html">SB Admin</a>
-        </div>
-        <ul class="nav navbar-right top-nav">
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> John Smith <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                    <li>
-                        <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-fw fa-envelope"></i> Inbox</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-fw fa-gear"></i> Settings</a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                        <a href="#"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-    </nav>
-    <div id="page-wrapper">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="page-header">
-                        Trending Tweets <!-- <small>Statistics Overview</small> -->
-                    </h1>
-                </div>
-            </div>
 
-            <div class="row" id="tweets">
-                <div class="col-md-12 text-center">
-                    <img src="http://0075397ca1480a6422a6-373ec2a9a8c1bd0dc32a6d880ae07ded.r21.cf1.rackcdn.com/wp-content/themes/razor/images/loading-animation.gif">
-                </div>
-            </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                <strong>Trending Tweets <!-- <small>Statistics Overview</small> --></strong>
+            </h1>
+        </div>
+    </div>
+
+    <div class="row" id="tweets">
+        <div class="col-md-12 text-center">
+            <img src="http://0075397ca1480a6422a6-373ec2a9a8c1bd0dc32a6d880ae07ded.r21.cf1.rackcdn.com/wp-content/themes/razor/images/loading-animation.gif" style="margin: 10%">
         </div>
     </div>
 
@@ -79,7 +45,7 @@
         password: '566891a4-c54c-4066-a87b-3f89acb13240'
     });
 
-    var panel_colors = ['green','yellow','red','primary'];
+    var panel_colors = ['green','yellow','red','primary','black','purple','royal'];
     var TOTAL_TWEETS = 18;
 
     // method for maintaining the stream with the Appbasefor real-time updates
@@ -130,19 +96,22 @@
                 // console.log(response.hits.hits[i]._source.hashtag);
                 // response.hits.hits.length
 
-                var num = (parseInt(Math.random() * 1000)) % 4;
+                var num = (parseInt(Math.random() * 1000)) % panel_colors.length;
+                var hashtag_query =  response.hits.hits[i]._source.hashtag;
 
-                $('#tweets').append('<div class="col-lg-4 col-md-6" id="tweet-' + (i + 1) + '"><div class="panel panel-' + panel_colors[num] + '"><div class="panel-heading"><div class="huge">' + response.hits.hits[i]._source.hashtag + '</div></div></div></div>');
+                $('#tweets').append('<div class="col-lg-4 col-md-6" id="tweet-' + (i + 1) + '"><div class="panel panel-' + panel_colors[num] + '"><div class="panel-heading"><div class="huge hashtag-link"><a href="https://twitter.com/search?q=' + hashtag_query + '" target="_blank">#' + hashtag_query + '</a></div></div></div></div>');
                 newflag = false;
             }
         } else {
             var random_tweet = (parseInt(Math.random() * 5000)) % TOTAL_TWEETS;
-            var num = (parseInt(Math.random() * 1000)) % 4;
+            var num = (parseInt(Math.random() * 1000)) % panel_colors.length;
 
             var tweet = $('#tweet-' + (random_tweet + 1));
-            tweet.fadeTo( "slow", 0.33 );
-            tweet.html('<div class="panel panel-' + panel_colors[num] + '"><div class="panel-heading"><div class="huge">' + response._source.hashtag + '</div></div></div>');
-            tweet.fadeTo( "slow", 1);
+            var hashtag_query = response._source.hashtag;
+
+            tweet.fadeTo( "fast", 0);
+            tweet.html('<div class="panel panel-' + panel_colors[num] + '"><div class="panel-heading"><div class="huge hashtag-link"><a href="https://twitter.com/search?q=' + hashtag_query + '" target="_blank">#' + hashtag_query + '</a></div></div></div>');
+            tweet.fadeTo( "fast", 1);
         }
     }).on('error', function(error) {
         // TODO(@sahildua2305): handle it properly

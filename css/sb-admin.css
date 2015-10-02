@@ -1,3 +1,4 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,900);
 /*!
  * Start Bootstrap - SB Admin Bootstrap Admin Template (http://startbootstrap.com)
  * Code licensed under the Apache License v2.0.
@@ -7,15 +8,13 @@
 /* Global Styles */
 
 body {
-    margin-top: 100px;
-    background-color: #222;
+    padding: 10px;
+    margin: 0 50px;
+    /*margin-top: 100px;*/
+    /*background-color: #222;*/
+    font-family: 'Roboto', sans-serif;
 }
 
-@media(min-width:768px) {
-    body {
-        margin-top: 50px;
-    }
-}
 
 #wrapper {
     padding-left: 0;
@@ -226,4 +225,32 @@ ul.alert-dropdown {
 
 .panel-yellow > a:hover {
     color: #df8a13;
+}
+
+/*different colors*/
+.panel-purple > .panel-heading {
+    border-color: #f0ad4e;
+    color: #fff;
+    background-color: #D74EF0;
+}
+
+.panel-black > .panel-heading {
+    border-color: #656565;
+    color: #fff;
+    background-color: #000000;
+}
+
+.panel-royal > .panel-heading {
+    border-color: #337ab7;
+    color: #fff;
+    background-color: #1C1F82;
+}
+
+
+.hashtag-link a{
+    color: white;
+}
+
+.hashtag-link a:hover{
+    text-decoration: none;
 }
