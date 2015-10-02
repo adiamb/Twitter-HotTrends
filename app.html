@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Twitter Trends</title>
+    <script src="bower_components/appbase-js/browser/appbase.js"></script>
+</head>
+
+<body>
+	<script>
+		// method for authorizing the API calls to Appbase
+		var appbase = new Appbase({
+			url: 'https://scalr.api.appbase.io',
+			appname: 'twitter-hashtags',
+			username: '4Qrd6fbNm',
+			password: '566891a4-c54c-4066-a87b-3f89acb13240'
+		});
+
+		// method for maintaining the stream with the Appbasefor real-time updates
+		appbase.streamSearch({
+			type: 'hashtags',
+			body: {
+				query: {
+					match_all: {}
+				}
+			}
+		}).on('data', function(response) {
+			// structure of repsonse will be something like this - 
+			// {
+			//   "took": 1,
+			//   "timed_out": false,
+			//   "_shards": {
+			//     "total": 1,
+			//     "successful": 1,
+			//     "failed": 0
+			//   },
+			//   "hits": {
+			//     "total": 1,
+			//     "max_score": 1,
+			//     "hits": [
+			//       {
+			//         "_index": "app`248",
+			//         "_type": "hashtags",
+			//         "_id": "1",
+			//         "_score": 1,
+			//         "_source": {
+			//           "hashtag": "some_text"
+			//         }
+			//       }
+			//     ]
+			//   }
+			// }
+			// So basically, in every response there will be total number of hits, and there will be same number of objects in the hits.
+			// Then in each hit object in hits, there will be ["source"]["hashtag"] that's the required hashtag text
+			// So every time there is a new hashtag, this method will be triggered.
+			// Hence, the logic for adding the new hashtag to the UI will go HERE.
+			console.log(response);
+		}).on('error', function(error) {
+			// TODO(@sahildua2305): handle it properly
+			console.log("caught a stream error", error)
+		});
+	</script>
+</body>
+</html>
