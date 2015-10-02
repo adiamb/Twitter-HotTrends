@@ -9,12 +9,10 @@
 
     <title>Twitter Trends</title>
 
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/sb-admin.css" rel="stylesheet">
-    <link href="css/plugins/morris.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
 
-    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link rel="shortcut icon" href="http://www.buffaloexchange.com/wp-content/uploads/twitter-sharing-34x34.png">
+    <link rel="shortcut icon" href="favicon.png">
     
     <script src="bower_components/appbase-js/browser/appbase.js"></script>
 </head>
@@ -24,7 +22,7 @@
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">
-                <strong>Trending Tweets <!-- <small>Statistics Overview</small> --></strong>
+                <strong>Trending Tweets</strong>
             </h1>
         </div>
     </div>
@@ -36,7 +34,6 @@
     </div>
 
 <script>
-    // method for authorizing the API calls to Appbase
     var newflag = true;
     var appbase = new Appbase({
         url: 'https://scalr.api.appbase.io',
@@ -48,7 +45,6 @@
     var panel_colors = ['green','yellow','red','primary','black','purple','royal'];
     var TOTAL_TWEETS = 18;
 
-    // method for maintaining the stream with the Appbasefor real-time updates
     appbase.streamSearch({
         type: 'hashtags',
         body: {
@@ -58,43 +54,9 @@
             }
         }
     }).on('data', function(response) {
-        // structure of repsonse will be something like this - 
-        // {
-        //   "took": 1,
-        //   "timed_out": false,
-        //   "_shards": {
-        //     "total": 1,
-        //     "successful": 1,
-        //     "failed": 0
-        //   },
-        //   "hits": {
-        //     "total": 1,
-        //     "max_score": 1,
-        //     "hits": [
-        //       {
-        //         "_index": "app`248",
-        //         "_type": "hashtags",
-        //         "_id": "1",
-        //         "_score": 1,
-        //         "_source": {
-        //           "hashtag": "some_text"
-        //         }
-        //       }
-        //     ]
-        //   }
-        // }
-        // So basically, in every response there will be total number of hits, and there will be same number of objects in the hits.
-        // Then in each hit object in hits, there will be ["source"]["hashtag"] that's the required hashtag text
-        // So every time there is a new hashtag, this method will be triggered.
-        // Hence, the logic for adding the new hashtag to the UI will go HERE.
-        // console.log(response);
-        // var test = JSON.parse(response);
-
         if(newflag == true){
             $('#tweets').html('');
             for(var i=0; i<TOTAL_TWEETS; i++){
-                // console.log(response.hits.hits[i]._source.hashtag);
-                // response.hits.hits.length
 
                 var num = (parseInt(Math.random() * 1000)) % panel_colors.length;
                 var hashtag_query =  response.hits.hits[i]._source.hashtag;
@@ -119,8 +81,7 @@
     });
 </script>
 
-<script src="js/jquery.js"></script>
-<script src="js/bootstrap.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 
 </body>
 </html>
