@@ -4,7 +4,12 @@ from tweepy import OAuthHandler
 from tweepy import Stream
 import json
 import requests
+import sys, os
+
+# sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from credentials import access_token, access_token_secret, consumer_key, consumer_secret
+
+print access_token
 
 #Appbase credentials
 user = "4Qrd6fbNm"
