@@ -4,9 +4,7 @@ from tweepy import OAuthHandler
 from tweepy import Stream
 import json
 import requests
-import sys, os
 
-# sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from credentials import access_token, access_token_secret, consumer_key, consumer_secret
 
 print access_token
@@ -37,7 +35,7 @@ class StdOutListener(StreamListener):
                 print hashtag_text
                 res = requests.post(store_url, data=json.dumps(hashtag_data), headers={"Content-type": "application/json"})
             return True
-        except KeyError:
+        except UnicodeEncodeError, KeyError:
             return True
         # print json.dumps(json_data, indent=4, sort_keys = True)
 
@@ -54,4 +52,4 @@ if __name__ == '__main__':
     stream = Stream(auth, l)
 
     #This line filter Twitter Streams to capture data by the keywords: 'python', 'javascript', 'ruby'
-    stream.filter(track=['india'])
+    stream.filter(track=['python', 'ruby', 'javascript'])
