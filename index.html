@@ -22,7 +22,7 @@
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">
-                <strong>Trending Tweets</strong>
+                <strong>Recent Hashtags</strong>
             </h1>
         </div>
     </div>
@@ -33,55 +33,80 @@
         </div>
     </div>
 
-<script>
-    var newflag = true;
-    var appbase = new Appbase({
-        url: 'https://scalr.api.appbase.io',
-        appname: 'twitter-hashtags',
-        username: '4Qrd6fbNm',
-        password: '566891a4-c54c-4066-a87b-3f89acb13240'
-    });
 
-    var panel_colors = ['green','yellow','red','primary','black','purple','royal'];
-    var TOTAL_TWEETS = 18;
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script>
+        var newflag = true;
+        var appbase = new Appbase({
+            url: 'https://scalr.api.appbase.io',
+            appname: 'twitter-hashtags',
+            username: '4Qrd6fbNm',
+            password: '566891a4-c54c-4066-a87b-3f89acb13240'
+        });
 
-    appbase.streamSearch({
-        type: 'hashtags',
-        body: {
-            size: 18,
-            query: {
-                match_all: {}
+        var panel_colors = ['green','yellow','red','primary','purple','royal'];
+        var TOTAL_TWEETS = 18;
+
+        appbase.streamSearch({
+            type: 'hashtags',
+            body: {
+                size: 18,
+                query: {
+                    match_all: {}
+                }
             }
-        }
-    }).on('data', function(response) {
-        if(newflag == true){
-            $('#tweets').html('');
-            for(var i=0; i<TOTAL_TWEETS; i++){
+        }).on('data', function(response) {
+            if(newflag == true){
+                $('#tweets').html('');
+                for(var i=0; i<TOTAL_TWEETS; i++){
 
+                    var num = (parseInt(Math.random() * 1000)) % panel_colors.length;
+                    var hashtag_query =  response.hits.hits[i]._source.hashtag;
+
+                    $('#tweets').append('<div class="col-lg-4 col-md-6" id="tweet-' + (i + 1) + '"><div class="panel panel-' + panel_colors[num] + '"><div class="panel-heading"><div class="huge hashtag-link"><a id="typed-' + (i + 1) + '" href="https://twitter.com/search?q=' + hashtag_query + '" target="_blank">#' + hashtag_query + '</a></div></div></div></div>');
+                    newflag = false;
+                }
+            } else {
+                var random_tweet = (parseInt(Math.random() * 5000)) % TOTAL_TWEETS;
                 var num = (parseInt(Math.random() * 1000)) % panel_colors.length;
-                var hashtag_query =  response.hits.hits[i]._source.hashtag;
 
-                $('#tweets').append('<div class="col-lg-4 col-md-6" id="tweet-' + (i + 1) + '"><div class="panel panel-' + panel_colors[num] + '"><div class="panel-heading"><div class="huge hashtag-link"><a href="https://twitter.com/search?q=' + hashtag_query + '" target="_blank">#' + hashtag_query + '</a></div></div></div></div>');
-                newflag = false;
+                var tweet = $('#tweet-' + (random_tweet + 1));
+                var hashtag_query = response._source.hashtag;
+
+                tweet.fadeTo( "fast", 0);
+                tweet.html('<div class="panel panel-' + panel_colors[num] + '"><div class="panel-heading"><div class="huge hashtag-link"><a id="typed-' + (random_tweet + 1) + '" href="https://twitter.com/search?q=' + hashtag_query + '" target="_blank">#' + hashtag_query + '</a></div></div></div>');
+                tweet.fadeTo( "fast", 1);
+
+                // typewriter by roXon //
+                var $el = $('#typed-' + (random_tweet + 1)),
+                txt = $el.text(),
+                txtLen = txt.length,
+                timeOut,
+                char = 0;
+
+                $el.text('|');
+
+                $(function typeIt() {
+                    var humanize = Math.round(Math.random() * (200 - 30)) + 30;
+                    timeOut = setTimeout(function() {
+                        char++;
+                        var type = txt.substring(0, char);
+                        $el.text(type + '|');
+                        typeIt();
+
+                        if (char == txtLen) {
+                            $el.text($el.text().slice(0, -1)); // remove the '|'
+                            clearTimeout(timeOut);
+                        }
+
+                    }, humanize);
+                }());
             }
-        } else {
-            var random_tweet = (parseInt(Math.random() * 5000)) % TOTAL_TWEETS;
-            var num = (parseInt(Math.random() * 1000)) % panel_colors.length;
-
-            var tweet = $('#tweet-' + (random_tweet + 1));
-            var hashtag_query = response._source.hashtag;
-
-            tweet.fadeTo( "fast", 0);
-            tweet.html('<div class="panel panel-' + panel_colors[num] + '"><div class="panel-heading"><div class="huge hashtag-link"><a href="https://twitter.com/search?q=' + hashtag_query + '" target="_blank">#' + hashtag_query + '</a></div></div></div>');
-            tweet.fadeTo( "fast", 1);
-        }
-    }).on('error', function(error) {
-        // TODO(@sahildua2305): handle it properly
-        console.log("caught a stream error", error);
-    });
-</script>
-
-<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+        }).on('error', function(error) {
+            // TODO(@sahildua2305): handle it properly
+            console.log("caught a stream error", error);
+        });
+    </script>
 
 </body>
 </html>
